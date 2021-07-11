@@ -1,15 +1,15 @@
 from bs4 import BeautifulSoup
 import scrapy
-
+AUTHOR = 'lev-tolstoy'
 
 class ExampleSpider(scrapy.Spider):
     name = "spider"
 
-    def start_requests(self):
+    def start_reqsuests(self):
         last_page = True
         page_num = 0
         while last_page:
-            url = f"https://knijky.ru/authors/lev-tolstoy?page={page_num}"
+            url = f"https://knijky.ru/authors/{AUTHOR}?page={page_num}"
             page_num += 1
             yield scrapy.Request(url=url, callback=self.parse)
             last_page = scrapy.Request(url=url, callback=self.parse).response.status == 200
