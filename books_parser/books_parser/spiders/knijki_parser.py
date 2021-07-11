@@ -6,12 +6,13 @@ class ExampleSpider(scrapy.Spider):
     name = "spider"
 
     def start_requests(self):
-        urls = [
-            f"https://knijky.ru/authors/lev-tolstoy?page={page_num}"
-            for page_num in range(409 // 20 + 1)
-        ]
-        for url in urls:
+        last_page = True
+        page_num = 0
+        while last_page:
+            url = f"https://knijky.ru/authors/lev-tolstoy?page={page_num}"
+            page_num += 1
             yield scrapy.Request(url=url, callback=self.parse)
+            last_page = scrapy.Request(url=url, callback=self.parse).response.status == 200
 
     def parse(self, response):
         self.soup = BeautifulSoup(response.text, "lxml")
